@@ -740,10 +740,18 @@ export default function ListBusiness() {
                   </div>
                 </RadioGroup>
 
-                {(formData.onlineShopOption === 'sure' || formData.onlineShopOption === 'maybe') && (
+                {formData.onlineShopOption === 'sure' && (
                   <div className="ml-6 p-3 bg-green-50 border border-green-200 rounded-lg">
                     <p className="text-sm text-green-800 font-medium">
                       Within 48 hours, your online shop website and POS (plus other apps like Inventory and Sales) will be ready. We'll send you the link, login details, and detailed instructions in an email. The total is 10 USD. You can choose the suitable payment options below.
+                    </p>
+                  </div>
+                )}
+
+                {formData.onlineShopOption === 'maybe' && (
+                  <div className="ml-6 p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <p className="text-sm text-green-800 font-medium">
+                      The total is 10 USD. Please choose the suitable payment options below.
                     </p>
                   </div>
                 )}
