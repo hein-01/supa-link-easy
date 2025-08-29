@@ -46,7 +46,7 @@ const Index = () => {
       <Navbar />
       
       {/* Hero Banner Section */}
-      <section className="relative h-[300px] md:h-[350px] px-4 overflow-hidden">
+      <section className="relative h-[300px] md:h-[350px] px-4 overflow-visible mb-12">
         {/* Background Images Slider */}
         <div className="absolute inset-0">
           {/* Desktop Background Images */}
