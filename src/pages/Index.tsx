@@ -94,7 +94,7 @@ const Index = () => {
                   <SwiperSlide key={category.value} className="flex items-center justify-center">
                      <button
                        onClick={() => setSelectedCategory(category.value)}
-                       className={`w-full h-full text-black font-medium text-sm flex items-center justify-center px-3 ${
+                       className={`w-full h-full text-black font-medium text-xs sm:text-sm flex items-center justify-center px-2 sm:px-3 ${
                          selectedCategory === category.value ? 'bg-yellow-500' : 'bg-yellow-400'
                        }`}
                      >
@@ -107,7 +107,7 @@ const Index = () => {
             
             <Input
               type="text"
-              placeholder="iPhone"
+              placeholder=""
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="flex-1 border-0 text-gray-600 placeholder-gray-400 focus-visible:ring-0"
