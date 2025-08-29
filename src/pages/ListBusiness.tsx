@@ -159,7 +159,7 @@ export default function ListBusiness() {
   const handleProductImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
-      const maxSize = 3 * 1024 * 1024; // 3MB in bytes
+      const maxSize = 1 * 1024 * 1024; // 1MB in bytes
       const maxFiles = 3;
       
       // Check file count
@@ -178,7 +178,7 @@ export default function ListBusiness() {
       if (oversizedFiles.length > 0) {
         toast({
           title: "Files Too Large",
-          description: `Each product image must be smaller than 3MB. ${oversizedFiles.length} file(s) exceed this limit.`,
+          description: `Each product image must be smaller than 1MB. ${oversizedFiles.length} file(s) exceed this limit.`,
           variant: "destructive",
         });
         e.target.value = ''; // Clear the input
@@ -459,7 +459,7 @@ export default function ListBusiness() {
                         Choose Product Images
                       </p>
                       <p className="text-xs text-blue-600 mt-1">
-                        Select up to 3 images (PNG, JPG, max 3MB each)
+                        Select up to 3 images (PNG, JPG, max 1MB each)
                       </p>
                     </div>
                   </label>
@@ -725,7 +725,7 @@ export default function ListBusiness() {
 
               {/* Online Shop + POS Option */}
               <div className="space-y-4">
-                <Label>Enjoy a free 14-day Online Shop Website and POS. It's just $10 a month after that, and you can cancel anytime.</Label>
+                <Label>Enjoy a free 14-day Online Shop Website and POS. Please also rest assured that you will be informed before your trial expires. Only $10 a month after that, and can cancel anytime.</Label>
                 <RadioGroup
                   value={formData.onlineShopOption}
                   onValueChange={(value) => handleInputChange('onlineShopOption', value)}
