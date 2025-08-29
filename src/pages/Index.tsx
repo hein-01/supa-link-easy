@@ -74,9 +74,9 @@ const Index = () => {
         <div className="container mx-auto text-center relative z-10">
         </div>
         
-        {/* Search Bar - positioned at bottom */}
-        <div className="absolute bottom-4 left-4 right-4 z-10">
-          <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg border-4 border-[#8F6DF5] hover:border-[#7C5CE6] transition-colors duration-300 p-2 flex items-center space-x-2">
+        {/* Search Bar - positioned extending below hero */}
+        <div className="absolute -bottom-8 left-4 right-4 z-20">
+          <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-xl p-2 flex items-center space-x-2">
             <div className="bg-yellow-400 rounded-md overflow-hidden">
               <Swiper
                 direction="vertical"
@@ -113,8 +113,8 @@ const Index = () => {
               className="flex-1 border-0 text-gray-600 placeholder-gray-400 focus-visible:ring-0"
             />
             
-            <Button className="bg-[#8F6DF5] hover:bg-[#7C5CE6] text-white px-3 py-2 rounded-md flex items-center justify-center">
-              <Search className="h-4 w-4" />
+            <Button className="bg-transparent hover:bg-transparent text-primary px-3 py-2 rounded-md flex items-center justify-center">
+              <Search className="h-6 w-6" />
             </Button>
           </div>
         </div>
