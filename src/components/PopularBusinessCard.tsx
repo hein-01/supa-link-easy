@@ -243,31 +243,6 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
             </DialogHeader>
             <form onSubmit={handleReviewSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="rating">Rating</Label>
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setReviewData({ ...reviewData, rating: star })}
-                      className="focus:outline-none"
-                    >
-                      <Star
-                        className={`w-6 h-6 ${
-                          star <= reviewData.rating
-                            ? 'fill-yellow-400 text-yellow-400'
-                            : 'text-gray-300'
-                        }`}
-                      />
-                    </button>
-                  ))}
-                  <span className="ml-2 text-sm text-muted-foreground">
-                    {reviewData.rating}/5
-                  </span>
-                </div>
-              </div>
-              
-              <div className="space-y-2">
                 <Label htmlFor="comment">Your Review</Label>
                 <Textarea
                   id="comment"
