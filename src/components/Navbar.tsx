@@ -23,7 +23,7 @@ export const Navbar = () => {
           {/* Left Side - Logo and Find Shops */}
           <div className="flex items-center space-x-6">
             <Link to="/" className="flex items-center space-x-2">
-              <Building2 className="h-6 w-6 text-primary" />
+              <Building2 className="h-6 w-6 text-primary border border-gray-300 rounded p-1" />
               <span className="text-xl font-bold text-foreground">wellfinds</span>
             </Link>
             
