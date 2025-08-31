@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -42,7 +42,42 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
   const [openReviewModal, setOpenReviewModal] = useState(false);
   const [reviewData, setReviewData] = useState({ rating: 5, comment: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [existingReviews, setExistingReviews] = useState<any[]>([]);
+  const [loadingReviews, setLoadingReviews] = useState(false);
   const { toast } = useToast();
+
+  // Fetch existing reviews when modal opens
+  useEffect(() => {
+    if (openReviewModal) {
+      fetchReviews();
+    }
+  }, [openReviewModal, business.id]);
+
+  const fetchReviews = async () => {
+    setLoadingReviews(true);
+    try {
+      const { data, error } = await supabase
+        .from('business_reviews')
+        .select(`
+          id,
+          comment,
+          rating,
+          created_at,
+          profiles:user_id (
+            display_name
+          )
+        `)
+        .eq('business_id', business.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setExistingReviews(data || []);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+    } finally {
+      setLoadingReviews(false);
+    }
+  };
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,7 +114,8 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
       });
 
       setReviewData({ rating: 5, comment: '' });
-      setOpenReviewModal(false);
+      // Refresh reviews list
+      await fetchReviews();
     } catch (error) {
       console.error('Error submitting review:', error);
       toast({
@@ -237,11 +273,48 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
               Reviews
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Write a Review for {business.name}</DialogTitle>
+              <DialogTitle>Reviews for {business.name}</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleReviewSubmit} className="space-y-4">
+            
+            {/* Existing Reviews Section */}
+            <div className="space-y-4 mb-6">
+              {loadingReviews ? (
+                <div className="text-center py-4">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto"></div>
+                  <p className="text-sm text-muted-foreground mt-2">Loading reviews...</p>
+                </div>
+              ) : existingReviews.length > 0 ? (
+                <>
+                  <h3 className="font-medium text-sm text-foreground">Customer Reviews ({existingReviews.length})</h3>
+                  <div className="space-y-3 max-h-60 overflow-y-auto">
+                    {existingReviews.map((review) => (
+                      <div key={review.id} className="border rounded-lg p-3 bg-muted/30">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-medium text-sm">
+                            {review.profiles?.display_name || 'Anonymous'}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {new Date(review.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-sm text-foreground">{review.comment}</p>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className="text-center py-4">
+                  <p className="text-sm text-muted-foreground">No reviews yet. Be the first to review!</p>
+                </div>
+              )}
+            </div>
+            
+            {/* Review Form */}
+            <div className="border-t pt-4">
+              <h3 className="font-medium text-sm text-foreground mb-4">Write a Review</h3>
+              <form onSubmit={handleReviewSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="comment">Your Review</Label>
                 <Textarea
@@ -267,6 +340,7 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
                 </Button>
               </div>
             </form>
+            </div>
           </DialogContent>
         </Dialog>
         {isLicenseValid(business.license_expired_date) && (
