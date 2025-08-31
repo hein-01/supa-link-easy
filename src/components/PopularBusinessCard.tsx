@@ -63,17 +63,34 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
           comment,
           rating,
           created_at,
-          profiles:user_id (
-            display_name
-          )
+          user_id
         `)
         .eq('business_id', business.id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setExistingReviews(data || []);
+
+      // Fetch profiles separately to get display names
+      if (data && data.length > 0) {
+        const userIds = data.map(review => review.user_id);
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('user_id, display_name')
+          .in('user_id', userIds);
+
+        // Merge reviews with profile data
+        const reviewsWithProfiles = data.map(review => ({
+          ...review,
+          profiles: profiles?.find(p => p.user_id === review.user_id) || null
+        }));
+
+        setExistingReviews(reviewsWithProfiles);
+      } else {
+        setExistingReviews(data || []);
+      }
     } catch (error) {
       console.error('Error fetching reviews:', error);
+      setExistingReviews([]);
     } finally {
       setLoadingReviews(false);
     }
@@ -106,7 +123,18 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
           comment: reviewData.comment,
         });
 
-      if (error) throw error;
+      if (error) {
+        // Handle duplicate review error
+        if (error.code === '23505') {
+          toast({
+            title: "Review already exists",
+            description: "You have already reviewed this business. You can only submit one review per business.",
+            variant: "destructive",
+          });
+          return;
+        }
+        throw error;
+      }
 
       toast({
         title: "Review submitted!",
@@ -179,6 +207,8 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
     return products;
   };
 
+  const hasMultipleImages = business.product_images && business.product_images.length > 1;
+
   return (
     <Card className="group w-full max-w-[320px] h-[470px] flex flex-col shadow-lg hover:shadow-2xl transition-all duration-300 mx-auto">
       <div className="relative overflow-hidden rounded-t-lg">
@@ -195,7 +225,7 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
           }}
           spaceBetween={0}
           slidesPerView={1}
-          loop={true}
+          loop={hasMultipleImages}
           className="w-full h-[200px] product-carousel"
         >
           {business.product_images && business.product_images.length > 0 ? (
