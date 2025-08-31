@@ -122,7 +122,6 @@ export type Database = {
           product_images: string[] | null
           products_catalog: string | null
           rating: number | null
-          reviews: string[] | null
           starting_price: string | null
           state: string | null
           tiktok_url: string | null
@@ -151,7 +150,6 @@ export type Database = {
           product_images?: string[] | null
           products_catalog?: string | null
           rating?: number | null
-          reviews?: string[] | null
           starting_price?: string | null
           state?: string | null
           tiktok_url?: string | null
@@ -180,7 +178,6 @@ export type Database = {
           product_images?: string[] | null
           products_catalog?: string | null
           rating?: number | null
-          reviews?: string[] | null
           starting_price?: string | null
           state?: string | null
           tiktok_url?: string | null

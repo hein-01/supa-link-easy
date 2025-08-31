@@ -61,21 +61,15 @@ export const PopularBusinessCard = ({ business }: PopularBusinessCardProps) => {
         return;
       }
 
-      // Update the businesses table with the new review
-      const { data: currentBusiness } = await supabase
-        .from('businesses')
-        .select('reviews')
-        .eq('id', business.id)
-        .single();
-
-      const currentReviews = currentBusiness?.reviews || [];
-      const newReview = `${reviewData.rating}/5 - ${reviewData.comment}`;
-      const updatedReviews = [...currentReviews, newReview];
-
+      // Insert review into business_reviews table
       const { error } = await supabase
-        .from('businesses')
-        .update({ reviews: updatedReviews })
-        .eq('id', business.id);
+        .from('business_reviews')
+        .insert({
+          business_id: business.id,
+          user_id: user.id,
+          rating: reviewData.rating,
+          comment: reviewData.comment,
+        });
 
       if (error) throw error;
 
