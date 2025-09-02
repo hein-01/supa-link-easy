@@ -6,6 +6,8 @@ interface AdminProfile {
   id: string;
   user_id: string;
   admin_role: string;
+  two_factor_enabled?: boolean;
+  two_factor_secret?: string;
   created_at: string;
   updated_at: string;
 }

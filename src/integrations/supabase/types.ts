@@ -143,15 +143,18 @@ export type Database = {
           name: string
           odoo_expired_date: string | null
           owner_id: string
+          payment_status: string
           phone: string | null
           "POS+Website": number | null
           product_images: string[] | null
           products_catalog: string | null
           rating: number | null
+          receipt_url: string | null
           starting_price: string | null
           state: string | null
           tiktok_url: string | null
           updated_at: string
+          user_email: string | null
           website: string | null
           zip_code: string | null
         }
@@ -171,15 +174,18 @@ export type Database = {
           name: string
           odoo_expired_date?: string | null
           owner_id: string
+          payment_status?: string
           phone?: string | null
           "POS+Website"?: number | null
           product_images?: string[] | null
           products_catalog?: string | null
           rating?: number | null
+          receipt_url?: string | null
           starting_price?: string | null
           state?: string | null
           tiktok_url?: string | null
           updated_at?: string
+          user_email?: string | null
           website?: string | null
           zip_code?: string | null
         }
@@ -199,15 +205,18 @@ export type Database = {
           name?: string
           odoo_expired_date?: string | null
           owner_id?: string
+          payment_status?: string
           phone?: string | null
           "POS+Website"?: number | null
           product_images?: string[] | null
           products_catalog?: string | null
           rating?: number | null
+          receipt_url?: string | null
           starting_price?: string | null
           state?: string | null
           tiktok_url?: string | null
           updated_at?: string
+          user_email?: string | null
           website?: string | null
           zip_code?: string | null
         }
