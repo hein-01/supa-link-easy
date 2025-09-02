@@ -295,6 +295,18 @@ export type Database = {
         Args: { user_email: string }
         Returns: boolean
       }
+      get_pending_businesses_with_emails: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          created_at: string
+          id: string
+          name: string
+          owner_id: string
+          payment_status: string
+          receipt_url: string
+          user_email: string
+        }[]
+      }
       get_public_business_by_id: {
         Args: { business_id: string }
         Returns: {

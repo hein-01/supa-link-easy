@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 interface Business {
   id: string;
   name: string;
+  owner_id: string;
   user_email: string;
   receipt_url: string;
   payment_status: string;
@@ -31,10 +32,7 @@ export default function ToBeConfirmedListings() {
   const fetchPendingListings = async () => {
     try {
       const { data, error } = await supabase
-        .from('businesses')
-        .select('id, name, user_email, receipt_url, payment_status, created_at')
-        .eq('payment_status', 'to_be_confirmed')
-        .order('created_at', { ascending: false });
+        .rpc('get_pending_businesses_with_emails');
 
       if (error) throw error;
       setListings(data || []);
