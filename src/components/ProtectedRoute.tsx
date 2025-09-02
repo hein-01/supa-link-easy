@@ -21,6 +21,19 @@ export default function ProtectedRoute({ children, requireBusinessOwner = false 
         setUser(user);
 
         if (user) {
+          // Check if user is an admin first
+          const { data: adminData } = await supabase
+            .from('admin_users')
+            .select('id')
+            .eq('user_id', user.id)
+            .maybeSingle();
+
+          if (adminData) {
+            // User is an admin, redirect to admin dashboard
+            window.location.href = '/admin/dashboard';
+            return;
+          }
+
           // Fetch user profile to get role
           const { data: profile, error: profileError } = await supabase
             .from('profiles')

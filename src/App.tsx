@@ -16,6 +16,7 @@ import AdminAuth from "./pages/admin/AdminAuth";
 import AdminAuthCallback from "./pages/admin/AdminAuthCallback";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ProtectedAdminRoute from "./components/admin/ProtectedAdminRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 import ListAndGetPOS from "./pages/ListAndGetPOS";
 import UserDashboard from "./pages/UserDashboard";
 
@@ -45,7 +46,11 @@ const App = () => (
             </ProtectedAdminRoute>
           } />
           <Route path="/list-&-get-pos-website" element={<ListAndGetPOS />} />
-          <Route path="/dashboard" element={<UserDashboard />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <UserDashboard />
+            </ProtectedRoute>
+          } />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
