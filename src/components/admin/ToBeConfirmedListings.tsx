@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -11,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ExternalLink, CheckCircle, Edit, Trash2, AlertCircle } from "lucide-react";
+import { ExternalLink, CheckCircle, Edit, Trash2, AlertCircle, Save } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Business {
@@ -28,6 +29,7 @@ interface Business {
 export default function ToBeConfirmedListings() {
   const [listings, setListings] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingDates, setEditingDates] = useState<{[key: string]: string}>({});
   const { toast } = useToast();
 
   const fetchPendingListings = async () => {
@@ -110,6 +112,55 @@ export default function ToBeConfirmedListings() {
     window.open(`/business/${businessId}/edit`, '_blank');
   };
 
+  const updateListingExpiredDate = async (businessId: string, newDate: string) => {
+    try {
+      const { error } = await supabase
+        .from('businesses')
+        .update({ listing_expired_date: newDate })
+        .eq('id', businessId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Listing expired date updated successfully",
+      });
+
+      // Remove from editing state
+      setEditingDates(prev => {
+        const newState = { ...prev };
+        delete newState[businessId];
+        return newState;
+      });
+
+      // Refresh the listings
+      fetchPendingListings();
+    } catch (error) {
+      console.error('Error updating listing expired date:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update listing expired date",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDateChange = (businessId: string, value: string) => {
+    setEditingDates(prev => ({
+      ...prev,
+      [businessId]: value
+    }));
+  };
+
+  const formatDateForInput = (dateString: string | null) => {
+    if (!dateString) return '';
+    try {
+      return new Date(dateString).toISOString().split('T')[0];
+    } catch {
+      return '';
+    }
+  };
+
   useEffect(() => {
     fetchPendingListings();
   }, []);
@@ -188,8 +239,32 @@ export default function ToBeConfirmedListings() {
                     <TableCell className="text-sm text-muted-foreground">
                       {new Date(listing.created_at).toLocaleDateString()}
                     </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {listing.listing_expired_date ? new Date(listing.listing_expired_date).toLocaleDateString() : 'Not set'}
+                    <TableCell className="text-sm">
+                      <div className="flex items-center space-x-2">
+                        <Input
+                          type="date"
+                          value={editingDates[listing.id] !== undefined 
+                            ? editingDates[listing.id] 
+                            : formatDateForInput(listing.listing_expired_date)
+                          }
+                          onChange={(e) => handleDateChange(listing.id, e.target.value)}
+                          className="w-40"
+                        />
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => updateListingExpiredDate(
+                            listing.id, 
+                            editingDates[listing.id] !== undefined 
+                              ? editingDates[listing.id] 
+                              : formatDateForInput(listing.listing_expired_date)
+                          )}
+                          className="flex items-center space-x-1"
+                        >
+                          <Save className="h-3 w-3" />
+                          <span>Save</span>
+                        </Button>
+                      </div>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center space-x-2">
