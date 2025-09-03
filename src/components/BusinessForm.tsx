@@ -303,6 +303,7 @@ export default function BusinessForm({ onSuccess, editingBusiness }: BusinessFor
         products_catalog: formData.productsCatalog.length > 0 ? formData.productsCatalog.join(', ') : null,
         license_expired_date: formData.licenseExpiredDate || null,
         product_images: allProductImages.length > 0 ? allProductImages : null,
+        receipt_url: receiptUrl || editingBusiness?.receipt_url || null,
         "POS+Website": formData.onlineShopOption === 'sure' ? 1 : 0
       };
 
