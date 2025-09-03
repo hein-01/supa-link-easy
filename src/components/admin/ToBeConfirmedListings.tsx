@@ -113,17 +113,34 @@ export default function ToBeConfirmedListings() {
   };
 
   const updateListingExpiredDate = async (businessId: string, newDate: string) => {
+    if (!newDate) {
+      toast({
+        title: "Error",
+        description: "Please select a valid date",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
-      const { error } = await supabase
+      console.log('Updating listing expired date:', { businessId, newDate });
+      
+      const { data, error } = await supabase
         .from('businesses')
         .update({ listing_expired_date: newDate })
-        .eq('id', businessId);
+        .eq('id', businessId)
+        .select('listing_expired_date');
 
-      if (error) throw error;
+      if (error) {
+        console.error('Database error:', error);
+        throw error;
+      }
+
+      console.log('Database updated successfully:', data);
 
       toast({
         title: "Success",
-        description: "Listing expired date updated successfully",
+        description: `Listing expired date updated to ${new Date(newDate).toLocaleDateString()}`,
       });
 
       // Remove from editing state
@@ -133,13 +150,13 @@ export default function ToBeConfirmedListings() {
         return newState;
       });
 
-      // Refresh the listings
+      // Refresh the listings to show updated data
       fetchPendingListings();
     } catch (error) {
       console.error('Error updating listing expired date:', error);
       toast({
         title: "Error",
-        description: "Failed to update listing expired date",
+        description: "Failed to update listing expired date. Please try again.",
         variant: "destructive",
       });
     }
