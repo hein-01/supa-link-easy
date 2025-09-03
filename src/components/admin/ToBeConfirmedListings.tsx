@@ -22,6 +22,7 @@ interface Business {
   receipt_url: string;
   payment_status: string;
   created_at: string;
+  listing_expired_date: string;
 }
 
 export default function ToBeConfirmedListings() {
@@ -155,6 +156,7 @@ export default function ToBeConfirmedListings() {
                   <TableHead>Receipt</TableHead>
                   <TableHead>Payment Status</TableHead>
                   <TableHead>Submitted</TableHead>
+                  <TableHead>Listing Expired Date</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -185,6 +187,9 @@ export default function ToBeConfirmedListings() {
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
                       {new Date(listing.created_at).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {listing.listing_expired_date ? new Date(listing.listing_expired_date).toLocaleDateString() : 'Not set'}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center space-x-2">

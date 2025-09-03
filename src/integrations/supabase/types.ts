@@ -300,6 +300,7 @@ export type Database = {
         Returns: {
           created_at: string
           id: string
+          listing_expired_date: string
           name: string
           owner_id: string
           payment_status: string
