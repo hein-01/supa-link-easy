@@ -510,12 +510,10 @@ export default function UserDashboard() {
                               </TableCell>
                               <TableCell>
                                 <div className="space-y-2">
-                                  {business.odoo_expired_date ? (
+                                  {business.odoo_expired_date && (
                                     <span className={odooExpired ? 'text-destructive' : 'text-muted-foreground'}>
                                       {new Date(business.odoo_expired_date).toLocaleDateString()}
                                     </span>
-                                  ) : (
-                                    <span className="text-muted-foreground">N/A</span>
                                   )}
                                   {business['POS+Website'] === 0 && (
                                     <Button
@@ -524,7 +522,7 @@ export default function UserDashboard() {
                                         setSelectedBusiness(business);
                                         setUpgradeModalOpen(true);
                                       }}
-                                      className="bg-secondary hover:bg-secondary/90 w-full"
+                                      className="bg-secondary hover:bg-secondary/90 text-secondary-foreground w-full"
                                     >
                                       Get POS + Website
                                     </Button>
