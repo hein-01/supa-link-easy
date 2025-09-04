@@ -509,37 +509,37 @@ export default function UserDashboard() {
                                 )}
                               </TableCell>
                               <TableCell>
-                                {business.odoo_expired_date ? (
-                                  <span className={odooExpired ? 'text-destructive' : 'text-muted-foreground'}>
-                                    {new Date(business.odoo_expired_date).toLocaleDateString()}
-                                  </span>
-                                ) : (
-                                  <span className="text-muted-foreground">N/A</span>
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                <div className="flex gap-2">
-                                  <Button
-                                    size="sm"
-                                    disabled={!canUpgrade}
-                                    onClick={() => {
-                                      setSelectedBusiness(business);
-                                      setUpgradeModalOpen(true);
-                                    }}
-                                    className={canUpgrade ? "bg-primary hover:bg-primary/90" : ""}
-                                  >
-                                    Upgrade
-                                  </Button>
-                                  {!business.odoo_expired_date && (
+                                <div className="space-y-2">
+                                  {business.odoo_expired_date ? (
+                                    <span className={odooExpired ? 'text-destructive' : 'text-muted-foreground'}>
+                                      {new Date(business.odoo_expired_date).toLocaleDateString()}
+                                    </span>
+                                  ) : (
+                                    <span className="text-muted-foreground">N/A</span>
+                                  )}
+                                  {business['POS+Website'] === 0 && (
                                     <Button
                                       size="sm"
                                       onClick={() => navigate("/list-&-get-pos-website")}
-                                      className="bg-secondary hover:bg-secondary/90"
+                                      className="bg-secondary hover:bg-secondary/90 w-full"
                                     >
                                       Get POS + Website
                                     </Button>
                                   )}
                                 </div>
+                              </TableCell>
+                              <TableCell>
+                                <Button
+                                  size="sm"
+                                  disabled={!canUpgrade}
+                                  onClick={() => {
+                                    setSelectedBusiness(business);
+                                    setUpgradeModalOpen(true);
+                                  }}
+                                  className={canUpgrade ? "bg-primary hover:bg-primary/90" : ""}
+                                >
+                                  Upgrade
+                                </Button>
                               </TableCell>
                             </TableRow>
                           );
