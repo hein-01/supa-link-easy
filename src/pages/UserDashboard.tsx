@@ -522,7 +522,8 @@ export default function UserDashboard() {
                                         setSelectedBusiness(business);
                                         setUpgradeModalOpen(true);
                                       }}
-                                      className="bg-secondary hover:bg-secondary/90 text-secondary-foreground w-full"
+                                      className="text-white w-full px-2 hover:opacity-90 transition-opacity"
+                                      style={{ backgroundColor: '#EAB33A' }}
                                     >
                                       Get POS + Website
                                     </Button>
