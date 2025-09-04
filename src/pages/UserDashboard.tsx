@@ -518,17 +518,28 @@ export default function UserDashboard() {
                                 )}
                               </TableCell>
                               <TableCell>
-                                <Button
-                                  size="sm"
-                                  disabled={!canUpgrade}
-                                  onClick={() => {
-                                    setSelectedBusiness(business);
-                                    setUpgradeModalOpen(true);
-                                  }}
-                                  className={canUpgrade ? "bg-primary hover:bg-primary/90" : ""}
-                                >
-                                  Upgrade
-                                </Button>
+                                <div className="flex gap-2">
+                                  <Button
+                                    size="sm"
+                                    disabled={!canUpgrade}
+                                    onClick={() => {
+                                      setSelectedBusiness(business);
+                                      setUpgradeModalOpen(true);
+                                    }}
+                                    className={canUpgrade ? "bg-primary hover:bg-primary/90" : ""}
+                                  >
+                                    Upgrade
+                                  </Button>
+                                  {!business.odoo_expired_date && (
+                                    <Button
+                                      size="sm"
+                                      onClick={() => navigate("/list-&-get-pos-website")}
+                                      className="bg-secondary hover:bg-secondary/90"
+                                    >
+                                      Get POS + Website
+                                    </Button>
+                                  )}
+                                </div>
                               </TableCell>
                             </TableRow>
                           );
