@@ -520,7 +520,10 @@ export default function UserDashboard() {
                                   {business['POS+Website'] === 0 && (
                                     <Button
                                       size="sm"
-                                      onClick={() => navigate("/list-&-get-pos-website")}
+                                      onClick={() => {
+                                        setSelectedBusiness(business);
+                                        setUpgradeModalOpen(true);
+                                      }}
                                       className="bg-secondary hover:bg-secondary/90 w-full"
                                     >
                                       Get POS + Website
