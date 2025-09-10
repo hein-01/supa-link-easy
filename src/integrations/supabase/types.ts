@@ -75,16 +75,19 @@ export type Database = {
           created_at: string
           id: string
           name: string
+          popular_products: string[] | null
         }
         Insert: {
           created_at?: string
           id?: string
           name: string
+          popular_products?: string[] | null
         }
         Update: {
           created_at?: string
           id?: string
           name?: string
+          popular_products?: string[] | null
         }
         Relationships: []
       }
