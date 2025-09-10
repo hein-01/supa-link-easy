@@ -16,6 +16,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { supabase } from "@/integrations/supabase/client";
 
 interface FiltersModalProps {
   onSearchChange: (search: string) => void;
@@ -43,21 +44,43 @@ export const FiltersModal = ({
   const [open, setOpen] = useState(false);
   const [category, setCategory] = useState(initialCategory);
   const [product, setProduct] = useState(initialProduct);
+  const [categoryProducts, setCategoryProducts] = useState<Record<string, string[]>>({
+    "all": ["All Products"]
+  });
 
-  // Category to products mapping
-  const categoryProducts: Record<string, string[]> = {
-    "all": ["All Products"],
-    "Restaurant": ["Fast Food", "Fine Dining", "Takeaway", "Delivery"],
-    "Retail": ["Clothing", "Electronics", "Home & Garden", "Books"],
-    "Service": ["Consultation", "Repair", "Maintenance", "Installation"],
-    "Healthcare": ["Check-up", "Treatment", "Prescription", "Emergency"],
-    "Beauty": ["Haircut", "Manicure", "Facial", "Massage"],
-    "Automotive": ["Car Wash", "Oil Change", "Tire Service", "Repair"],
-    "Entertainment": ["Movies", "Games", "Events", "Sports"],
-    "Education": ["Courses", "Tutoring", "Training", "Workshops"],
-    "Technology": ["Software", "Hardware", "Support", "Development"],
-    "Finance": ["Banking", "Insurance", "Investment", "Loans"],
-  };
+  // Fetch categories and their popular products
+  useEffect(() => {
+    const fetchCategoryProducts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("business_categories")
+          .select("name, popular_products")
+          .order("name");
+
+        if (error) throw error;
+
+        const productsMap: Record<string, string[]> = {
+          "all": ["All Products"]
+        };
+
+        data?.forEach((categoryData) => {
+          const categoryName = categoryData.name;
+          const products = categoryData.popular_products || [];
+          productsMap[categoryName] = products.length > 0 ? products : ["All Products"];
+        });
+
+        setCategoryProducts(productsMap);
+      } catch (error) {
+        console.error("Error fetching category products:", error);
+        // Keep default fallback
+        setCategoryProducts({
+          "all": ["All Products"]
+        });
+      }
+    };
+
+    fetchCategoryProducts();
+  }, []);
 
   const currentProducts = categoryProducts[category] || ["All Products"];
 
