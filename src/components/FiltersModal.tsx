@@ -66,7 +66,7 @@ export const FiltersModal = ({
         data?.forEach((categoryData) => {
           const categoryName = categoryData.name;
           const products = categoryData.popular_products || [];
-          productsMap[categoryName] = products.length > 0 ? products : ["All Products"];
+          productsMap[categoryName] = products.length > 0 ? ["All Products", ...products] : ["All Products"];
         });
 
         setCategoryProducts(productsMap);
