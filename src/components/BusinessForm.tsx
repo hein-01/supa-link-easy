@@ -123,18 +123,37 @@ export default function BusinessForm({ onSuccess, editingBusiness }: BusinessFor
       try {
         const { data, error } = await supabase
           .from('plans')
-          .select('name, pricing')
-          .in('name', ['Listing', 'Odoo']);
+          .select('name, pricing, currency_symbol, duration');
 
-        if (error) throw error;
+        if (error) {
+          console.error('Error fetching plan prices:', error);
+          return;
+        }
 
-        const listingPlan = data?.find(plan => plan.name === 'Listing');
-        const odooPlan = data?.find(plan => plan.name === 'Odoo');
+        const normalize = (s: string | null | undefined) =>
+          (s ?? '').toLowerCase().replace(/[^a-z0-9+\s]/g, '');
 
-        if (listingPlan) setListingPrice(listingPlan.pricing);
-        if (odooPlan) setOdooPrice(odooPlan.pricing);
+        const listingPlan = data?.find((plan: any) =>
+          normalize(plan.name).includes('listing')
+        );
+
+        const odooPlan = data?.find((plan: any) => {
+          const n = normalize(plan.name);
+          return n.includes('odoo') || n.includes('pos') || n.includes('website');
+        });
+
+        const formatPrice = (plan: any) => {
+          if (!plan) return '';
+          const symbol = plan.currency_symbol || '';
+          const price = plan.pricing || '';
+          const duration = plan.duration || '';
+          return `${symbol}${price}${duration}`.trim();
+        };
+
+        setListingPrice(formatPrice(listingPlan));
+        setOdooPrice(formatPrice(odooPlan));
       } catch (error) {
-        console.error('Error fetching plan prices:', error);
+        console.error('Error:', error);
       }
     };
 
